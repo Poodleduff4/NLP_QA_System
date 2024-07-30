@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+  }
+
+  .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+  }
+
+  .qa-pair {
+      background-color: #1ae8ff;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 20px;
+  }
+
+  .qa-pair h2 {
+      color: #333;
+  }
+
+  .qa-pair p {
+      color: #666;
+  }
+</style>
+
+<body>
+
+<h1 class="title">Covid Dataset Query Results</h1>
+Query:<input class="queryinput" name="queryInput" id="queryinput">
+<button onclick="sendQuery()">HaBeeeep</button>
+<br>
+<p id="query_result"></p>
+
+<div class="container">
+  <h1>Question-Answer Pairs</h1>
+  <div class="qa-pair">
+      <h2>Are anti-inflammatory drugs recommended for covid?</h2>
+      <p>Therapeutic options include mainly anti-inflammatory, immunosuppressive, and/or anti-fibrotic drugs'</p>
+      
+  </div>
+
+  <div class="qa-pair">
+    <h2>What is the minimum viral load for detection?</h2>
+    <p>1.0×10(6) copies/mL</p>
+  </div>
+
+  <div class="qa-pair">
+    <h2>What is Chikungunya virus?</h2>
+    <p>pathogenic alphavirus</p>
+    <p>CHIKV</p>
+    <p>pathogenic alphavirus that causes chikungunya fever</p>
+    <p>a reemerging global health threat that produces debilitating arthritis in people</p>
+  </div>
+
+  <div class="qa-pair">
+    <h2>What are the most common symptoms?</h2>
+    <p>fatigue and pruritus</p>
+    <p>cough with or without paroxysms, cyanosis, apnea, tachypnea, difficulty in breathing and leukocytosis</p>
+    <p>Cough (82.5%), fever (75%), and malaise</p>
+  </div>
+
+  <div class="qa-pair">
+    <h2>How does pregnancy affect the patient?</h2>
+    <p>The pregnant patient may also develop conditions co-incidental to pregnancy such as trauma or appendicitis</p>
+    <p>the pregnant patient is more likely to be admitted with diseases non-specific to pregnancy</p>
+    
+  </div>
+
+
+</div>
+
+</body>
+</html>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    async function sendQuery() {
+          document.getElementById('query_result').innerHTML = '' 
+        
+        query = document.getElementById('queryinput').value
+        console.log(query)
+        const response = await axios.get("http://142.114.114.71:5001/query", { //"http://142.114.114.71:5001/query"
+          params: {
+            searchQuery: query
+          },
+          timeout:100000
+        });
+        str = ''
+        
+        response.data.forEach(element => {
+          str += element['answer'][0]
+          str += '\n\n'
+          const node = document.createElement("p");
+          node.textContent = element['answer'][0]
+          const nl = document.createElement("br")
+          document.getElementById('query_result').appendChild(node)
+          document.getElementById('query_result').appendChild(nl)
+          // console.log(element['answer'])
+        });
+        
+    }
+
+</script>
